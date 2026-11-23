@@ -113,8 +113,8 @@ A longer recording gives finer frequency resolution (Δf = 1/T), so the peak is 
 
 **Zero-padding, fft(x, 4·length(x)) on the 1-second recording:**
 - The plot now has a point every 0.25 Hz, so it looks like a smooth curve instead of separate bins.
-- It shows the shape that was "hidden" between the 1 Hz bins: wide peaks with side ripples (sidelobes).
-- But the two components at 14.22 Hz and 15 Hz are still blurred together. Zero-padding did **not** separate them the way the 4-second recording did.
+- It shows the shape that was "hidden" between the 1 Hz bins: wide peaks with side ripples (sidelobes) on both sides.
+- The two components overlap into one wide shape: a big peak at about 15 Hz (≈ 0.72) with a smaller bump on its left side (≈ 0.40 around 13.75 Hz) and a dip between them at about 14.25 Hz. So the smaller bump is not at the true f2 = 14.22 Hz, and the 15 Hz peak is still too low (0.72 instead of 0.8). These are the same errors as in the 1-second spectrum, just drawn more smoothly. Zero-padding did **not** separate the two frequencies cleanly the way the 4-second recording did.
 
 **Does zero-padding add information?** No. Zero-padding only adds zeros after the 200 real samples. It interpolates the same spectrum at more points, so the plot looks smoother, but the original recording is still 1 second long. The real frequency resolution is still about 1/T = 1 Hz. To actually resolve close frequencies, you need a **longer recording**, not more FFT points.
 
@@ -142,11 +142,12 @@ Check: |X(e^{jω})| = |sin(2ω) / sin(ω/2)|. This is zero when sin(2ω) = 0, i.
 
 ## AI Usage
 
-I used **Claude (Anthropic)** to help with this assignment. I gave it the assignment text, and it wrote the MATLAB scripts for all four exercises (based on the provided starting code) and a draft of the explanations in this README.
+## AI Usage
 
-I ran every script myself in MATLAB Online and checked the results:
-- The printed peak values (15 Hz → 0.800, 40 Hz → 0.400; the leakage values for 1 s and 4 s) match the tables above.
-- I calculated f2 and the bin spacings (1 Hz and 0.25 Hz) by hand.
-- I checked that `fft(x,4)` prints [4 0 0 0], and that the DTFT zeros are at ±π/2 and ±π in my plot.
-- I read through the explanations and made sure I can explain each plot myself.
-<!-- Add anything you changed yourself, e.g. colours, axis limits, wording. -->
+I used **Claude (Anthropic)** as a support tool. It helped me write the MATLAB scripts, based on the starting code from the assignment. I then worked through each exercise myself:
+
+- I ran all four scripts in MATLAB Online and fixed the setup problems myself (unzipping the files, a read-only file opened from a temporary folder, and changing to the right folder).
+- I checked every plot against the expected results: the 0.8 and 0.4 peaks at 15 Hz and 40 Hz, the leakage peaks for the 1 s and 4 s recordings, and `fft(x,4)` = [4 0 0 0] with the DTFT zeros at ±π/2 and ±π.
+- I calculated f2 = 14.22 Hz and the bin spacings (1 Hz and 0.25 Hz) by hand.
+- When I compared my zero-padded plot with the AI's explanation, it did not match: the AI said the two peaks were completely blurred together, but my plot showed a small separate bump near 13.75 Hz. I had the explanation corrected to describe what my plot actually shows.
+- I went through all the explanations to make sure I understand them and can explain each plot in class.
